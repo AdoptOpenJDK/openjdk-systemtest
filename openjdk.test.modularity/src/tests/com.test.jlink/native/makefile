@@ -52,7 +52,7 @@ P=:
 ###
 # Check platform is set to a single valid value
 ###
-VALID_PLATFORMS?=osx_x86-64,aix_ppc-32,aix_ppc-64,linux_390-32,linux_390-64,linux_ppc-32,linux_ppc-64,linux_x86-32,linux_x86-64,win_x86-32,win_x86-64,zos_390-32,zos_390-64,linux_ppcle-64,linux_arm-32,linux_arm-64,bsd_x86-64
+VALID_PLATFORMS?=osx_x86-64,aix_ppc-32,aix_ppc-64,linux_390-32,linux_390-64,linux_ppc-32,linux_ppc-64,linux_x86-32,linux_x86-64,win_x86-32,win_x86-64,zos_390-32,zos_390-64,linux_ppcle-64,linux_arm-32,linux_arm-64,bsd_x86-64,linux_riscv64-64
 ifndef PLATFORM
   $(error "The variable PLATFORM needs to be defined")
 endif
