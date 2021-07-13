@@ -359,17 +359,42 @@ limitations under the License.
 		<delete dir="${openjdk_test_mauve_src_dir}/gnu/testlet/org/omg/PortableServer/POAOperations"/>
 	</target>
 
-	<target name="get-source" depends="download-cvsclient, create-work-dir" unless="openjdk_test_mauve_already_built">
-		<exec dir="${openjdk_test_mauve_work_dir}" executable="java">
-		<arg value="-Dcvs.root=:pserver:anoncvs@sourceware.org:/cvs/mauve"/>
-		<arg value="-jar"/>
-		<arg value="${first_prereqs_root}/cvsclient/org-netbeans-lib-cvsclient.jar"/>
-		<arg value="export"/>
-		<arg value="-r"/>
-		<arg value="HEAD"/>
-		<arg value="mauve"/>
-</exec>
+	<condition property="isJavaHomeSet" value="true">
+	   <isset property="JAVA_HOME"/>
+    </condition>
+
+    <condition property="isTestJDKHomeSet" value="true">
+	  <isset property="TEST_JDK_HOME"/>
+    </condition>
+
+    <target name="get-source-using-java-home" if="isJavaHomeSet"> 
+        <exec dir="${openjdk_test_mauve_work_dir}" executable="java">
+		      <arg value="-Dcvs.root=:pserver:anoncvs@sourceware.org:/cvs/mauve"/>
+		      <arg value="-jar"/>
+		      <arg value="${first_prereqs_root}/cvsclient/org-netbeans-lib-cvsclient.jar"/>
+		      <arg value="export"/>
+		      <arg value="-r"/>
+		      <arg value="HEAD"/>
+		      <arg value="mauve"/>
+	    </exec>
 	</target>
+
+    <target name="get-source-using-test-jdk-home" if="isTestJDKHomeSet"> 
+        <exec dir="${openjdk_test_mauve_work_dir}" executable="TEST_JDK_HOME/bin/java">
+		      <arg value="-Dcvs.root=:pserver:anoncvs@sourceware.org:/cvs/mauve"/>
+		      <arg value="-jar"/>
+		      <arg value="${first_prereqs_root}/cvsclient/org-netbeans-lib-cvsclient.jar"/>
+		      <arg value="export"/>
+		      <arg value="-r"/>
+		      <arg value="HEAD"/>
+		      <arg value="mauve"/>
+	    </exec>
+	</target>
+
+    <target name="get-source" depends="download-cvsclient, create-work-dir" unless="openjdk_test_mauve_already_built">
+        <antcall target="get-source-using-java-home"/>
+        <antcall target="get-source-using-test-jdk-home"/>
+    </target>
 
 	<target name="check-if-source-available">
 		<!-- The existence of mauve/gnu/testlet/config.java.in is used to indicate that source is available to build. -->
